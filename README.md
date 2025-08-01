@@ -79,7 +79,7 @@ When you report USB issues, please attach relevant debug log from running the pr
 * Christian Kerl
 * Lingzhu Xiang (development/master branch)
 
-## My Notes
+# My Notes
 
 ### Environment Setup
 * You don't have to create a conda environment. The package installs on base directly.
