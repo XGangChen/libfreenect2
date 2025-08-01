@@ -79,51 +79,6 @@ When you report USB issues, please attach relevant debug log from running the pr
 * Christian Kerl
 * Lingzhu Xiang (development/master branch)
 
-# My Notes
-
-### Environment Setup
-* You don't have to create a conda environment. The package installs on base directly.
-* Download libfreenect2 source
-  ```
-  git clone https://github.com/OpenKinect/libfreenect2.git
-  cd libfreenect2
-  ```
-* Install build tools
-  ```
-  sudo apt-get install build-essential cmake pkg-config
-  ```
-* Create and enter a build directory & Configure with CUDA enabled, OpenCL off
-  ```
-  mkdir -p build && cd build
-
-  cmake .. \
-  -DENABLE_CUDA=ON \
-  -DENABLE_OPENCL=OFF \
-  -DENABLE_VIDEO=ON \
-  -DENABLE_EXAMPLES=ON
-  ```
-* Compile and install
-  ```
-  make -j$(nproc)
-  sudo make install
-  ```
-* Confirm whether Linux even “sees” the Kinect on the USB bus by `lsusb`. You should see something like `Bus 001 Device 007: ID 045e:02ad Microsoft Corp. Xbox NUI Kinect Sensor`
-* Copy the sample rules straight from the libfreenect2 repo. (The file name would be different; you should confirm by the same path.)
-  ```
-  sudo cp ~/libfreenect2/platform/linux/udev/90-kinect2.rules \
-        /etc/udev/rules.d/90-kinect2.rules
-  ```
-* Reload and re-trigger udev so it picks up the new file
-  ```
-  sudo udevadm control --reload-rules
-  sudo udevadm trigger
-  groups # Make sure your user is in plugdev
-  ```
-* Finally, try Protonect.
-  ```
-  ~/libfreenect2/build/bin/Protonect
-  ```
-
 ## Installation
 
 ### Windows / Visual Studio
@@ -299,3 +254,48 @@ Note: Ubuntu 12.04 is too old to support. Debian jessie may also be too old, and
 * Set up udev rules for device access: `sudo cp ../platform/linux/udev/90-kinect2.rules /etc/udev/rules.d/`, then replug the Kinect.
 * Run the test program: `./bin/Protonect`
 * Run OpenNI2 test (optional): `sudo apt-get install openni2-utils && sudo make install-openni2 && NiViewer2`. Environment variable `LIBFREENECT2_PIPELINE` can be set to `cl`, `cuda`, etc to specify the pipeline.
+
+# My Notes
+
+## Environment Setup
+* You don't have to create a conda environment. The package installs on base directly.
+* Download libfreenect2 source
+  ```
+  git clone https://github.com/OpenKinect/libfreenect2.git
+  cd libfreenect2
+  ```
+* Install build tools
+  ```
+  sudo apt-get install build-essential cmake pkg-config
+  ```
+* Create and enter a build directory & Configure with CUDA enabled, OpenCL off
+  ```
+  mkdir -p build && cd build
+
+  cmake .. \
+  -DENABLE_CUDA=ON \
+  -DENABLE_OPENCL=OFF \
+  -DENABLE_VIDEO=ON \
+  -DENABLE_EXAMPLES=ON
+  ```
+* Compile and install
+  ```
+  make -j$(nproc)
+  sudo make install
+  ```
+* Confirm whether Linux even “sees” the Kinect on the USB bus by `lsusb`. You should see something like `Bus 001 Device 007: ID 045e:02ad Microsoft Corp. Xbox NUI Kinect Sensor`
+* Copy the sample rules straight from the libfreenect2 repo. (The file name would be different; you should confirm by the same path.)
+  ```
+  sudo cp ~/libfreenect2/platform/linux/udev/90-kinect2.rules \
+        /etc/udev/rules.d/90-kinect2.rules
+  ```
+* Reload and re-trigger udev so it picks up the new file
+  ```
+  sudo udevadm control --reload-rules
+  sudo udevadm trigger
+  groups # Make sure your user is in plugdev
+  ```
+* Finally, try Protonect.
+  ```
+  ~/libfreenect2/build/bin/Protonect
+  ```
