@@ -323,6 +323,7 @@ export LIBFREENECT2_INSTALL_PREFIX=$CONDA_PREFIX
 pip install .
 
 conda install -c conda-forge libgcc-ng libstdcxx-ng
+conda install opencv
 ```
 Then you can run the example script `python multuframe_listener.py`
 
