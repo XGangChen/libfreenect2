@@ -258,7 +258,11 @@ Note: Ubuntu 12.04 is too old to support. Debian jessie may also be too old, and
 # My Notes
 
 ## Environment Setup
-* You don't have to create a conda environment. The package installs on base directly.
+* Create a conda environment for pylibfreenect2.
+  ```
+  conda create -n kinectx python=3.9
+  conda activate
+  ```
 * Download libfreenect2 source
   ```
   git clone https://github.com/OpenKinect/libfreenect2.git
@@ -273,6 +277,7 @@ Note: Ubuntu 12.04 is too old to support. Debian jessie may also be too old, and
   mkdir -p build && cd build
 
   cmake .. \
+  -DCMAKE_INSTALLPREFIX=$CONDA_PREFIX \
   -DENABLE_CUDA=ON \
   -DENABLE_OPENCL=OFF \
   -DENABLE_VIDEO=ON \
@@ -302,5 +307,22 @@ Note: Ubuntu 12.04 is too old to support. Debian jessie may also be too old, and
 
 ## Python Environment Transfer
 ### Using Pylibfreenect2
-- [Link](https://github.com/r9y9/pylibfreenect2 )
+- [pylibfreeenect2](https://github.com/r9y9/pylibfreenect2 )
+```
+pip install numpy==1.23.5
+export LIBFREENECT2_INSTALL_PREFIX=$CONDA_PREFIX
+pip install pylibfreenect2
+
+# from wherever you keep your projects…
+git clone https://github.com/r9y9/pylibfreenect2.git
+cd pylibfreenect2
+
+# install into your active conda env
+pip install cython numpy           # make sure prerequisites are in place
+export LIBFREENECT2_INSTALL_PREFIX=$CONDA_PREFIX
+pip install .
+
+conda install -c conda-forge libgcc-ng libstdcxx-ng
+```
+Then you can run the example script `python multuframe_listener.py`
 
