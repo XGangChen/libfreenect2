@@ -302,6 +302,5 @@ Note: Ubuntu 12.04 is too old to support. Debian jessie may also be too old, and
 
 ## Python Environment Transfer
 ### Using Pylibfreenect2
-- [**Link**][docs-py-url] &mdash;
+- [Link](https://github.com/r9y9/pylibfreenect2 )
 
-[docs-py-url] :https://github.com/r9y9/pylibfreenect2 
