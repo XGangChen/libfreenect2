@@ -299,3 +299,9 @@ Note: Ubuntu 12.04 is too old to support. Debian jessie may also be too old, and
   ```
   ~/libfreenect2/build/bin/Protonect
   ```
+
+## Python Environment Transfer
+### Using Pylibfreenect2
+- [**Link**][docs-py-url] &mdash;
+
+[docs-py-url] :https://github.com/r9y9/pylibfreenect2 
