@@ -42,8 +42,11 @@
   cd ~/libfreenect2
   rm -rf build && mkdir build && cd build
   # 12.x has the classic common/inc layout:
-  cmake .. -DENABLE_CUDA=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-    -DCUDA_SDK_ROOT_DIR=/usr/local/cuda-12.8/samples
+  cmake .. \
+  -DENABLE_CUDA=ON \
+  -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+  -DCUDA_NVCC_FLAGS="-I$HOME/opt/cuda-samples-12.8/common/inc" \
+  -DCMAKE_INSTALL_PREFIX="$CONDA_PREFIX"
   ```
 * Compile and install
   ```
@@ -65,6 +68,9 @@
 * Finally, try Protonect.
   ```
   ~/libfreenect2/build/bin/Protonect
+
+  # Try to running with GPUs
+  ~/libfreenect2/build/bin/Protonect cuda
   ```
 
 ### Python Environment Transfer
