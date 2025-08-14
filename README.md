@@ -13,24 +13,37 @@
   git clone https://github.com/OpenKinect/libfreenect2.git
   cd libfreenect2
   ```
-* Install CUDA toolkit from Nvidia official website (to fit the device) [CUDA install](https://developer.nvidia.com/cuda-downloads)
-  ```
-  sudo apt install nvidia-cuda-toolkit
-  ```
 * Install build tools
   ```
   sudo apt-get install build-essential cmake pkg-config
   ```
-* Create and enter a build directory & Configure with CUDA enabled, OpenCL off
+* Install CUDA toolkit from Nvidia official website (to fit the device) [CUDA install](https://developer.nvidia.com/cuda-downloads)
   ```
-  mkdir -p build && cd build
+  # Add Nvidia's repo
+  sudo mkdir -p /usr/share/keyrings
+  sudo wget -O /usr/share/keyrings/cuda-archive-keyring.gpg \
+    https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-archive-keyring.gpg
 
-  cmake .. \
-  -DCMAKE_INSTALLPREFIX=$CONDA_PREFIX \
-  -DENABLE_CUDA=ON \
-  -DENABLE_OPENCL=OFF \
-  -DENABLE_VIDEO=ON \
-  -DENABLE_EXAMPLES=ON
+  echo deb [signed-by=/usr/share/keyrings/cuda-archive-keyring.gpg] https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/ / | \
+  sudo tee /etc/apt/sources.list.d/cuda-ubuntu2204-x86_64.list
+  sudo apt update
+  
+  # Install CUDA toolkit+sample (make sure the toolkit version fit your CUDA driver version)
+  sudo apt install -y cuda-toolkit-12-8 cuda-samples-12-8
+  # Use 12.8 in your shell
+  echo 'export PATH=/usr/local/cuda-12.8/bin:$PATH' >> ~/.bashrc
+  echo 'export LD_LIBRARY_PATH=/usr/local/cuda-12.8/lib64:$LD_LIBRARY_PATH' >> ~/.bashrc
+  source ~/.bashrc
+  which nvcc
+  nvcc --version  # should report release 12.8
+  ```
+* Fresh build pointing to 12.8 Samples
+  ```
+  cd ~/libfreenect2
+  rm -rf build && mkdir build && cd build
+  # 12.x has the classic common/inc layout:
+  cmake .. -DENABLE_CUDA=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+    -DCUDA_SDK_ROOT_DIR=/usr/local/cuda-12.8/samples
   ```
 * Compile and install
   ```
