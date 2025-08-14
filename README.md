@@ -55,8 +55,7 @@
   ```
 
 ### Python Environment Transfer
-* Using Pylibfreenect2
-- [pylibfreeenect2](https://github.com/r9y9/pylibfreenect2 )
+* Using Pylibfreenect2 [pylibfreeenect2](https://github.com/r9y9/pylibfreenect2 )
 ```
 pip install numpy==1.23.5
 export LIBFREENECT2_INSTALL_PREFIX=$CONDA_PREFIX
