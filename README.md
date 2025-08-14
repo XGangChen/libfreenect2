@@ -261,7 +261,7 @@ Note: Ubuntu 12.04 is too old to support. Debian jessie may also be too old, and
 * Create a conda environment for pylibfreenect2.
   ```
   conda create -n kinectx python=3.9
-  conda activate
+  conda activate kinectx
   ```
 * Download libfreenect2 source
   ```
