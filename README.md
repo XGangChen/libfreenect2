@@ -50,7 +50,7 @@
   make -j$(nproc)
   sudo make install
   ```
-* Confirm whether Linux even “sees” the Kinect on the USB bus by `lsusb`. You should see something like `Bus 001 Device 007: ID 045e:02ad Microsoft Corp. Xbox NUI Kinect Sensor`
+* Confirm whether Linux even “sees” the Kinect on the USB bus by `lsusb`. You should see something like `Bus 001 Device 007: ID 045e:02ad Microsoft Corp. Xbox NUI Kinect Sensor`. If there isn't exist, replug it and try again.
 * Copy the sample rules straight from the libfreenect2 repo. (The file name would be different; you should confirm by the same path.)
   ```
   sudo cp ~/libfreenect2/platform/linux/udev/90-kinect2.rules \
