@@ -1,5 +1,83 @@
 # libfreenect2
 
+## My Notes
+
+### Environment Setup
+* Create a conda environment for pylibfreenect2.
+  ```
+  conda create -n kinectx python=3.9
+  conda activate kinectx
+  ```
+* Download libfreenect2 source
+  ```
+  git clone https://github.com/OpenKinect/libfreenect2.git
+  cd libfreenect2
+  ```
+* Install CUDA toolkit from Nvidia official website (to fit the device) [CUDA install](https://developer.nvidia.com/cuda-downloads)
+  ```
+  sudo apt install nvidia-cuda-toolkit
+  ```
+* Install build tools
+  ```
+  sudo apt-get install build-essential cmake pkg-config
+  ```
+* Create and enter a build directory & Configure with CUDA enabled, OpenCL off
+  ```
+  mkdir -p build && cd build
+
+  cmake .. \
+  -DCMAKE_INSTALLPREFIX=$CONDA_PREFIX \
+  -DENABLE_CUDA=ON \
+  -DENABLE_OPENCL=OFF \
+  -DENABLE_VIDEO=ON \
+  -DENABLE_EXAMPLES=ON
+  ```
+* Compile and install
+  ```
+  make -j$(nproc)
+  sudo make install
+  ```
+* Confirm whether Linux even “sees” the Kinect on the USB bus by `lsusb`. You should see something like `Bus 001 Device 007: ID 045e:02ad Microsoft Corp. Xbox NUI Kinect Sensor`
+* Copy the sample rules straight from the libfreenect2 repo. (The file name would be different; you should confirm by the same path.)
+  ```
+  sudo cp ~/libfreenect2/platform/linux/udev/90-kinect2.rules \
+        /etc/udev/rules.d/90-kinect2.rules
+  ```
+* Reload and re-trigger udev so it picks up the new file
+  ```
+  sudo udevadm control --reload-rules
+  sudo udevadm trigger
+  groups # Make sure your user is in plugdev
+  ```
+* Finally, try Protonect.
+  ```
+  ~/libfreenect2/build/bin/Protonect
+  ```
+
+### Python Environment Transfer
+* Using Pylibfreenect2
+- [pylibfreeenect2](https://github.com/r9y9/pylibfreenect2 )
+```
+pip install numpy==1.23.5
+export LIBFREENECT2_INSTALL_PREFIX=$CONDA_PREFIX
+pip install pylibfreenect2
+
+# from wherever you keep your projects…
+git clone https://github.com/r9y9/pylibfreenect2.git
+cd pylibfreenect2
+
+# install into your active conda env
+pip install cython numpy           # make sure prerequisites are in place
+export LIBFREENECT2_INSTALL_PREFIX=$CONDA_PREFIX
+pip install .
+
+conda install -c conda-forge libgcc-ng libstdcxx-ng
+conda install opencv
+```
+Then you can run the example script `python multuframe_listener.py`
+
+
+
 ## Table of Contents
 
 * [Description](README.md#description)
@@ -254,77 +332,3 @@ Note: Ubuntu 12.04 is too old to support. Debian jessie may also be too old, and
 * Set up udev rules for device access: `sudo cp ../platform/linux/udev/90-kinect2.rules /etc/udev/rules.d/`, then replug the Kinect.
 * Run the test program: `./bin/Protonect`
 * Run OpenNI2 test (optional): `sudo apt-get install openni2-utils && sudo make install-openni2 && NiViewer2`. Environment variable `LIBFREENECT2_PIPELINE` can be set to `cl`, `cuda`, etc to specify the pipeline.
-
-# My Notes
-
-## Environment Setup
-* Create a conda environment for pylibfreenect2.
-  ```
-  conda create -n kinectx python=3.9
-  conda activate kinectx
-  ```
-* Download libfreenect2 source
-  ```
-  git clone https://github.com/OpenKinect/libfreenect2.git
-  cd libfreenect2
-  ```
-* Install CUDA toolkit from Nvidia official website (to fit the device) [CUDA install](https://developer.nvidia.com/cuda-downloads)
-* Install build tools
-  ```
-  sudo apt-get install build-essential cmake pkg-config
-  ```
-* Create and enter a build directory & Configure with CUDA enabled, OpenCL off
-  ```
-  mkdir -p build && cd build
-
-  cmake .. \
-  -DCMAKE_INSTALLPREFIX=$CONDA_PREFIX \
-  -DENABLE_CUDA=ON \
-  -DENABLE_OPENCL=OFF \
-  -DENABLE_VIDEO=ON \
-  -DENABLE_EXAMPLES=ON
-  ```
-* Compile and install
-  ```
-  make -j$(nproc)
-  sudo make install
-  ```
-* Confirm whether Linux even “sees” the Kinect on the USB bus by `lsusb`. You should see something like `Bus 001 Device 007: ID 045e:02ad Microsoft Corp. Xbox NUI Kinect Sensor`
-* Copy the sample rules straight from the libfreenect2 repo. (The file name would be different; you should confirm by the same path.)
-  ```
-  sudo cp ~/libfreenect2/platform/linux/udev/90-kinect2.rules \
-        /etc/udev/rules.d/90-kinect2.rules
-  ```
-* Reload and re-trigger udev so it picks up the new file
-  ```
-  sudo udevadm control --reload-rules
-  sudo udevadm trigger
-  groups # Make sure your user is in plugdev
-  ```
-* Finally, try Protonect.
-  ```
-  ~/libfreenect2/build/bin/Protonect
-  ```
-
-## Python Environment Transfer
-### Using Pylibfreenect2
-- [pylibfreeenect2](https://github.com/r9y9/pylibfreenect2 )
-```
-pip install numpy==1.23.5
-export LIBFREENECT2_INSTALL_PREFIX=$CONDA_PREFIX
-pip install pylibfreenect2
-
-# from wherever you keep your projects…
-git clone https://github.com/r9y9/pylibfreenect2.git
-cd pylibfreenect2
-
-# install into your active conda env
-pip install cython numpy           # make sure prerequisites are in place
-export LIBFREENECT2_INSTALL_PREFIX=$CONDA_PREFIX
-pip install .
-
-conda install -c conda-forge libgcc-ng libstdcxx-ng
-conda install opencv
-```
-Then you can run the example script `python multuframe_listener.py`
-
