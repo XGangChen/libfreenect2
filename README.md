@@ -74,20 +74,25 @@
   ```
 
 ### Python Environment Transfer
+* Build deps (Cython needed; older setuptools is safer for legacy setup.py)
+  ```
+  pip install -U "pip<24.2" wheel "setuptools<70" "Cython<3"
+
+  # Install a prebuilt NumPy wheel compatible with Py3.9
+  pip install "numpy==1.23.5"
+  
+  # Environment hints so the build can find the C/C++ bits
+  export LIBFREENECT2_INSTALL_PREFIX="$CONDA_PREFIX"
+  export PKG_CONFIG_PATH="$CONDA_PREFIX/lib/pkgconfig:${PKG_CONFIG_PATH}"
+  export LD_LIBRARY_PATH="$CONDA_PREFIX/lib:${LD_LIBRARY_PATH}"
+  ```
 * Using Pylibfreenect2 [pylibfreeenect2](https://github.com/r9y9/pylibfreenect2 )
 ```
-pip install numpy==1.23.5
-export LIBFREENECT2_INSTALL_PREFIX=$CONDA_PREFIX
-pip install pylibfreenect2
+pip install --no-build-isolation --no-cache-dir pylibfreenect2
 
 # from wherever you keep your projects…
 git clone https://github.com/r9y9/pylibfreenect2.git
 cd pylibfreenect2
-
-# install into your active conda env
-pip install cython numpy           # make sure prerequisites are in place
-export LIBFREENECT2_INSTALL_PREFIX=$CONDA_PREFIX
-pip install .
 
 conda install -c conda-forge libgcc-ng libstdcxx-ng
 conda install opencv
