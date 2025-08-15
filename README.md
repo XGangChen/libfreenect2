@@ -17,36 +17,32 @@
   ```
   sudo apt-get install build-essential cmake pkg-config
   ```
-* Install CUDA toolkit from Nvidia official website (to fit the device) [CUDA install](https://developer.nvidia.com/cuda-downloads)
+* Install CUDA toolkit from Nvidia official website (make sure the toolkit version fit your driver version)
   ```
-  # Add Nvidia's repo
-  sudo mkdir -p /usr/share/keyrings
-  sudo wget -O /usr/share/keyrings/cuda-archive-keyring.gpg \
-    https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-archive-keyring.gpg
-
-  echo deb [signed-by=/usr/share/keyrings/cuda-archive-keyring.gpg] https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/ / | \
-  sudo tee /etc/apt/sources.list.d/cuda-ubuntu2204-x86_64.list
-  sudo apt update
-  
-  # Install CUDA toolkit+sample (make sure the toolkit version fit your CUDA driver version)
-  sudo apt install -y cuda-toolkit-12-8 cuda-samples-12-8
-  # Use 12.8 in your shell
-  echo 'export PATH=/usr/local/cuda-12.8/bin:$PATH' >> ~/.bashrc
-  echo 'export LD_LIBRARY_PATH=/usr/local/cuda-12.8/lib64:$LD_LIBRARY_PATH' >> ~/.bashrc
-  source ~/.bashrc
-  which nvcc
-  nvcc --version  # should report release 12.8
+  # Mine is 12.8
+  wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin
+  sudo mv cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600
+  wget https://developer.download.nvidia.com/compute/cuda/12.8.0/local_installers/cuda-repo-ubuntu2204-12-8-local_12.8.0-570.86.10-1_amd64.deb
+  sudo dpkg -i cuda-repo-ubuntu2204-12-8-local_12.8.0-570.86.10-1_amd64.deb
+  sudo cp /var/cuda-repo-ubuntu2204-12-8-local/cuda-*-keyring.gpg /usr/share/keyrings/
+  sudo apt-get update
+  sudo apt-get -y install cuda-toolkit-12-8
+  ```
+* Install CUDA samples
+  ```
+  git clone https://github.com/NVIDIA/cuda-samples.git
   ```
 * Fresh build pointing to 12.8 Samples
   ```
   cd ~/libfreenect2
-  rm -rf build && mkdir build && cd build
-  # 12.x has the classic common/inc layout:
+  sudo rm -rf build
+  mkdir build && cd build
+  
   cmake .. \
-  -DENABLE_CUDA=ON \
-  -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-  -DCUDA_NVCC_FLAGS="-I$HOME/opt/cuda-samples-12.8/common/inc" \
-  -DCMAKE_INSTALL_PREFIX="$CONDA_PREFIX"
+    -DENABLE_CUDA=ON \
+    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+    -DCUDA_NVCC_FLAGS=-I"$HOME/cuda-samples/Common" \
+    -DCMAKE_INSTALL_PREFIX="$CONDA_PREFIX"
   ```
 * Compile and install
   ```
